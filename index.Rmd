@@ -1,5 +1,10 @@
 ---
-output: html_document
+title: "WiDS Chicago/Evanston Data Dive"
+date: March 8, 2019
+output:
+  html_document:
+    toc: true
+    toc_float: true
 ---
 # Overview
 
@@ -14,6 +19,7 @@ Below is a plot of number of incidents per month from 2014-2018 that the Illinoi
 **NOTE**: This is not a question that we or the Red Cross definetively know the answer to. Feel free to be as creative as time allows!
 
 The data is described more below in the [the data](#the-data). We will give you a zip file to [download](#download) that has: 
+
 * Red Cross incident data
 * Shapefile (spatial data) for zip codes in Chicago, and a [script](#spatial-data) that merges this with the Red Cross data or Census data (both with zip codes)
 * [Data cleaning](#basic-cleaning) script in R

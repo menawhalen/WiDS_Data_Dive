@@ -6,5 +6,5 @@ output:
     toc: true
     toc_float: true
 theme:  jekyll-theme-minimal
-logo: red_cross_logo.png
 ---
+logo: /red_cross_logo.png

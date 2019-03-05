@@ -9,14 +9,17 @@ Below is a plot of number of incidents per month from 2014-2018 that the Illinoi
 ![](motivating_plot.png)
 
 
-The data is described more below in the [thedata](#The-Data). We will give you access to: 
+The data is described more below in the [the data](#the-data). We will give you access to: 
 * Red Cross incident data
 * Shapefile for zip codes in Chicago, along with a R file that will join the latitude/longitude in the Red Cross data
+* blah blah data cleaning
 * Weather data
 
 
 ## Goal
-Please email your 2 slides to als1@u.northwestern.edu. 
+Your team will need to create 2-3 slides (keep it simple) with your best visualization and text takeaways. 
+
+Please email your 2 slides to als1@u.northwestern.edu by 6:45 pm. Winner gets...bragging rights and eternal WiDS-dom and fame. 
 
 
 # The Data
@@ -48,4 +51,4 @@ The code book will list each variable name with a description followed by the va
 
 # Let's Get To Work
 ## Cleaning
-## Shape Files
+## Spatial Data

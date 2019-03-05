@@ -1,5 +1,10 @@
 # WiDS Data Dive 
 
 # The Data
+## Codebook
+## Download
 
-# Overview
+
+# Let's Get To Work
+## Cleaning
+## Shape Files

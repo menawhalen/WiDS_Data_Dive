@@ -1,17 +1,25 @@
-# WiDS Data Dive 
-changing this
 # Overview
 
 Welcome to the WiDS Data Dive, in partnership with the Illinois Red Cross. ![](red_cross_logo.jpg).
 
-The data is described more below (in the codebook ?). 
-
-You will have 90 minutes to complete the following task:
+You will have 90 minutes to complete the following task. Below is a plot of number of incidents per month from 2014-2018 that the Illinois Red Cross responded to. As you can see, even ignoring seasonality, we observe a *drop* in total incidents in 2018. Our questions is simple: **Why**?
 
 ![](motivating_plot.png)
 
 
+The data is described more below in the codebook. We will give you access to: 
+* Red Cross incident data
+* Shapefile for zip codes in Chicago, along with a R file that will join the latitude/longitude in the Red Cross data
+* Weather data
+
+
+##Goal
+Please email your 2 slides
+
+
 # The Data
+We give you access to shapefile data for Chicago, 
+
 ## Codebook
 The code book will list each variable name with a description followed by the variable type in italics. If variable is categorical responses will be listed.
 

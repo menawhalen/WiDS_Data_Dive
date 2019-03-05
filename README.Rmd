@@ -1,4 +1,6 @@
-
+---
+output: github_document
+---
 # Overview
 
 Welcome to the WiDS Data Dive, in partnership with the Chicago/Illinois Red Cross.

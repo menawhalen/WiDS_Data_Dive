@@ -41,8 +41,8 @@ Winner gets...bragging rights and eternal WiDS-dom and fame.
 ## Codebook
 The code book will list each variable name with a description followed by the variable type in italics. If variable is categorical responses will be listed.
 
-  * Date - The date of the incident *Date dd/mm/yyyy*
-  * Incident_num - A unique incident number for the specific incident from the last two numbers of the year - four numbers *Character*
+  * Date - The date an incident report was created *Date dd/mm/yyyy*
+  * Incident_num - Assigned per incident by DCSOps, the Red Cross incident management application. The first two numbers represent the fiscal year. The last four are sequential starting at the beginning of the fiscal year (July 1). Note that duplicate and invalid incidents as well as events to which the Red Cross deems a response is not needed (like a fire in a commercial or institutional building) have been removed from the dataset *Character*
   * Incident_type - The type of situation that lead to an incident *Character*
       + Blizzard
       + Building Collapse
@@ -50,35 +50,35 @@ The code book will list each variable name with a description followed by the va
       + Fire
       + Flood
       + HazMat
-      + No response needed - Arrived on scence and assistance was not needed presently
-      + Police
+      + No response needed - An incident for which the local jurisdiction determines that Red Cross services are not needed
+      + Police - An incident, like a shooting or hostage situation, for which assistance is provided directly to first responders in the form of food and hydration
       + Search and rescue 
       + Storm
       + Tornado
-      + Transportation
-      + Vacate
+      + Transportation -Typically, a vehicle into a residential structure or a train derailment
+      + Vacate - An incident in which a disaster has not occurred but living conditions are deemed unsafe for residents
   * City - Location city of incident *Character*
   * State - Location state of incident *Character*
   * ZIP - ZIP Code of where the incident occured. *Numeric*
   * County - The county where the incident occured *Character*
   * Latitude - Latitude of incident *Numeric*
   * Longitude - Longitude of incident *Numeric*
-  * Destroyed - 
-  * Major - 
-  * Minor - 
-  * Affected - 
+  * Destroyed - Number of residential units destroyed
+  * Major - Number of residential units suffering major damage
+  * Minor - Number of residential units suffering minor damage
+  * Affected - Number of residential units nominally affected
   * Injured - Number of people injured from the incident *Numeric*
   * Hospitalized - Number of people hospitalized from the incident *Numeric*
   * Desceased - Number of people that died from incident *Numeric*
-  * Adults - 
-  * Children - 
-  * Families - 
-  * Assistance - The amount of money given to those affected during the incident *Numeric* 
-  * Verified - When an incident was verified by the Red Cross *Timestamp dd/mm/yyyy 00:00:00 AM*
-  * Dispatched - When the Red Cross sent someone to the incident *Timestamp dd/mm/yyyy 00:00:00 AM*
-  * Responders_ID - When the responders to be dispatched from the Red Cross were identified *Timestamp dd/mm/yyyy 00:00:00 AM*
-  * On_scene - When the responders from the Red Cross were on the scene of the incident *Timestamp dd/mm/yyyy 00:00:00 AM*
-  * Departed - When the responders left the incident *Timestamp dd/mm/yyyy 00:00:00 AM*
+  * Adults - Number of adults in the incident *Numeric*
+  * Children - Number of children in the incident *Numeric*
+  * Families - Number of families in the incident *Numeric*
+  * Assistance - Amount of total financial assistance provided *Numeric* 
+  * Verified - The time and date the incident is verified by a Red Cross dispatcher *Timestamp dd/mm/yyyy 00:00:00 AM*
+  * Dispatched - The time and date it is determined by a Red Cross dispatcher that a response is required *Timestamp dd/mm/yyyy 00:00:00 AM*
+  * Responders_ID - The time and date a volunteer response team is identified by a Red Cross dispatcher *Timestamp dd/mm/yyyy 00:00:00 AM*
+  * On_scene - The time and date the volunteer response team arrives at an incident scene *Timestamp dd/mm/yyyy 00:00:00 AM*
+  * Departed - The time and date the volunteer response team departs the incident scene *Timestamp dd/mm/yyyy 00:00:00 AM*
 
 ## Download
 

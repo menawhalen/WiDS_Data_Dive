@@ -8,22 +8,25 @@ Below is a plot of number of incidents per month from 2014-2018 that the Illinoi
 
 ![](motivating_plot.png)
 
+**NOTE**: This is not a question that we or the Red Cross definetively know the answer to. Feel free to be as creative as time allows!
 
-The data is described more below in the [the data](#the-data). We will give you access to: 
+The data is described more below in the [the data](#the-data). We will give you a zip file to [download](#download) that has: 
 * Red Cross incident data
-* Shapefile for zip codes in Chicago, along with a R file that will join the latitude/longitude in the Red Cross data
-* blah blah data cleaning
+* Shapefile (spatial data) for zip codes in Chicago, and a [script](#spatial-data) that merges this with the Red Cross data or Census data (both with zip codes)
+* [Data cleaning](#basic-cleaning) script in R
 * Weather data
+* ECON DATA?
 
 
 ## Goal
 Your team will need to create 2-3 slides (keep it simple) with your best visualization and text takeaways. 
 
-Please email your 2 slides to als1@u.northwestern.edu by 6:45 pm. Winner gets...bragging rights and eternal WiDS-dom and fame. 
+Please email your 2 slides with the email subject: "DATA DIVE", and a list of team members names to <als1@u.northwestern.edu> by 6:45 pm. 
+
+Winner gets...bragging rights and eternal WiDS-dom and fame. 
 
 
 # The Data
-We give you access to shapefile data for Chicago, 
 
 ## Codebook
 The code book will list each variable name with a description followed by the variable type in italics. If variable is categorical responses will be listed.
@@ -49,6 +52,10 @@ The code book will list each variable name with a description followed by the va
 ## Download
 
 
-# Let's Get To Work
-## Cleaning
-## Spatial Data
+
+
+# Let's Get To Work... in R!
+
+## Basic Cleaning
+
+## Spatial Data 

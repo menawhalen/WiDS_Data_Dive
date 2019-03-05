@@ -9,14 +9,17 @@ Below is a plot of number of incidents per month from 2014-2018 that the Illinoi
 ![](motivating_plot.png)
 
 
-The data is described more below in the [thedata](#The-Data). We will give you access to: 
+The data is described more below in the [the data](#the-data). We will give you access to: 
 * Red Cross incident data
 * Shapefile for zip codes in Chicago, along with a R file that will join the latitude/longitude in the Red Cross data
+* blah blah data cleaning
 * Weather data
 
 
 ## Goal
-Please email your 2 slides to als1@u.northwestern.edu. 
+Your team will need to create 2-3 slides (keep it simple) with your best visualization and text takeaways. 
+
+Please email your 2 slides to als1@u.northwestern.edu by 6:45 pm. Winner gets...bragging rights and eternal WiDS-dom and fame. 
 
 
 # The Data
@@ -25,31 +28,27 @@ We give you access to shapefile data for Chicago,
 ## Codebook
 The code book will list each variable name with a description followed by the variable type in italics. If variable is categorical responses will be listed.
 
-\begin{itemize}
-  \list Date - The date of the incident *Date dd/mm/yyyy*
-  \list Incident_num - A unique incident number for the specific incident
-  \list Incident_type - The type of situation that lead to an incident. Include
-  \begin{itemize}
-      \list Blizzard
-      \list Building Collapse
-      \list Explosion
-      \list Fire
-      \list Flood
-      \list HazMat
-      \list No response needed - Arrived on scence and assistance was not needed presently.
-      \list Police
-      \list Search and rescue 
-      \list Storm
-      \list Tornado
-      \list Transportation
-      \list Vacate
+  * Date - The date of the incident *Date dd/mm/yyyy*
+  * Incident_num - A unique incident number for the specific incident *Character*
+  * Incident_type - The type of situation that lead to an incident. *Character*
+      + Blizzard
+      + Building Collapse
+      + Explosion
+      + Fire
+      + Flood
+      + HazMat
+      + No response needed - Arrived on scence and assistance was not needed presently.
+      + Police
+      + Search and rescue 
+      + Storm
+      + Tornado
+      + Transportation
+      + Vacate
   
-  \end{itemize}
 
-\end{itemize}
 ## Download
 
 
 # Let's Get To Work
 ## Cleaning
-## Shape Files
+## Spatial Data

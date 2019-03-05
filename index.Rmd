@@ -21,9 +21,10 @@ Below is a plot of number of incidents per month from 2014-2018 that the Illinoi
 The data is described more below in the [the data](#the-data). We will give you a zip file to [download](#download) that has: 
 
 * Red Cross incident data
-* Shapefile (spatial data) for zip codes in Chicago, and a [script](#spatial-data) that merges this with the Red Cross data or Census data (both with zip codes)
+* Shapefile for zip codes in Chicago, and a [spatial data cleaning R script](#spatial-data) that merges this with any outside csv (Red Cross or Census) based on zip code
 * [Data cleaning](#basic-cleaning) script in R
 * Weather data
+* National fire data
 * ECON DATA?
 
 

@@ -1,1 +1,12 @@
-theme: jekyll-theme-slate
+---
+title: "RuPaul-Predict-a-Looza"
+date: February 14, 2019
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+<h1> {{ title }} </h1>
+
+Page content here...

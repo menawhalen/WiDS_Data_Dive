@@ -90,7 +90,7 @@ The code book will list each variable name with a description followed by the va
 
 ## Basic Cleaning
 Below is some R code for downloading the data and doing some basic cleaning.
-```{r basicclean, warning=FALSE}
+```{r basicclean, warning=FALSE, message=FALSE}
 # Libraries for reading URL and csv
 library(RCurl) 
 library(readr)

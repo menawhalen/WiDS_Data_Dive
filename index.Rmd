@@ -88,5 +88,11 @@ The code book will list each variable name with a description followed by the va
 # Let's Get To Work... in R!
 
 ## Basic Cleaning
+Below is some R code for downloading the data and doing some basic cleaning.
+```{r basicclean}
+library(RCurl)
+red_cross<-getURL("https://raw.githubusercontent.com/menawhalen/WiDS_Data_Dive/master/Redcross.csv")
+
+```
 
 ## Spatial Data 

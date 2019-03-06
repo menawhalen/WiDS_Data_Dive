@@ -89,9 +89,24 @@ The code book will list each variable name with a description followed by the va
 
 ## Basic Cleaning
 Below is some R code for downloading the data and doing some basic cleaning.
-```{r basicclean}
-library(RCurl)
-red_cross<-getURL("https://raw.githubusercontent.com/menawhalen/WiDS_Data_Dive/master/Redcross.csv")
+```{r basicclean, warning=FALSE}
+# Libraries for reading URL and csv
+library(RCurl) 
+library(readr)
+# read in the text file for red cross from github 
+red_cross_text<-getURL("https://raw.githubusercontent.com/menawhalen/WiDS_Data_Dive/master/Redcross.csv")
+# puts into a csv with the first row of table being the column names, seperated by ","
+red_cross<-read.csv(text = red_cross_text, header = TRUE, sep = ",")
+# puts all the dates and time stamps in the right format for R
+red_cross$Date<-as.Date(red_cross$Date, format = "%m/%d/%Y")
+red_cross$Verified<-as.POSIXct(red_cross$Verified, format = "%m/%d/%Y %H:%M")
+red_cross$Dispatched<-as.POSIXct(red_cross$Dispatched, format = "%m/%d/%Y %H:%M")
+red_cross$Responders_ID<-as.POSIXct(red_cross$Responders_ID, format = "%m/%d/%Y %H:%M")
+red_cross$On_scene<-as.POSIXct(red_cross$On_scene, format = "%m/%d/%Y %H:%M")
+red_cross$Departed<-as.POSIXct(red_cross$Departed, format = "%m/%d/%Y %H:%M")
+
+# looking at each column to see how many NA's are in the column
+na_count <-sapply(red_cross, function(y) sum(length(which(is.na(y))))) 
 
 ```
 

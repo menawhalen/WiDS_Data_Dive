@@ -307,10 +307,24 @@ div.tocify {
 <div id="basic-cleaning" class="section level2">
 <h2>Basic Cleaning</h2>
 <p>Below is some R code for downloading the data and doing some basic cleaning.</p>
-<pre class="r"><code>library(RCurl)</code></pre>
-<pre><code>## Warning: package 'RCurl' was built under R version 3.5.2</code></pre>
+<pre class="r"><code># Libraries for reading URL and csv
+library(RCurl) </code></pre>
 <pre><code>## Loading required package: bitops</code></pre>
-<pre class="r"><code>red_cross&lt;-getURL(&quot;https://raw.githubusercontent.com/menawhalen/WiDS_Data_Dive/master/Redcross.csv&quot;)</code></pre>
+<pre class="r"><code>library(readr)
+# read in the text file for red cross from github 
+red_cross_text&lt;-getURL(&quot;https://raw.githubusercontent.com/menawhalen/WiDS_Data_Dive/master/Redcross.csv&quot;)
+# puts into a csv with the first row of table being the column names, seperated by &quot;,&quot;
+red_cross&lt;-read.csv(text = red_cross_text, header = TRUE, sep = &quot;,&quot;)
+# puts all the dates and time stamps in the right format for R
+red_cross$Date&lt;-as.Date(red_cross$Date, format = &quot;%m/%d/%Y&quot;)
+red_cross$Verified&lt;-as.POSIXct(red_cross$Verified, format = &quot;%m/%d/%Y %H:%M&quot;)
+red_cross$Dispatched&lt;-as.POSIXct(red_cross$Dispatched, format = &quot;%m/%d/%Y %H:%M&quot;)
+red_cross$Responders_ID&lt;-as.POSIXct(red_cross$Responders_ID, format = &quot;%m/%d/%Y %H:%M&quot;)
+red_cross$On_scene&lt;-as.POSIXct(red_cross$On_scene, format = &quot;%m/%d/%Y %H:%M&quot;)
+red_cross$Departed&lt;-as.POSIXct(red_cross$Departed, format = &quot;%m/%d/%Y %H:%M&quot;)
+
+# looking at each column to see how many NA's are in the column
+na_count &lt;-sapply(red_cross, function(y) sum(length(which(is.na(y))))) </code></pre>
 </div>
 <div id="spatial-data" class="section level2">
 <h2>Spatial Data</h2>

@@ -167,10 +167,15 @@ merge_spatial_data('geo_zipcodes.zip', 'population_income.csv', red_cross)
 ## Timestamp Problems
 Some of the timestamp variables like Verified and  On_Scene have errors from encoding incorrectly upon data entry. They have timestamps that start in the year 1900 or have the time Red Cross learns about the incident happening after the Red Cross arrived on the scene of the incident or left the incident. This is leading to negative time for the Red Cross getting to the incident or negative time when the Red Cross is at the incident. Here is some code that changes those timestamp variables to be missing (NA) if they are before the dataset time period or lead to negative times to get to the scene or time at the incident. 
 ```{r timestamp, warning=FALSE, message=FALSE}
-library(dplyr)
+# packages for mutate and using dates
+library(dplyr) 
 library(lubridate)
+# creates a new variable for the time it takes for the Red Cross to be on the scene in minutes
 red_cross$time_to_inc<-difftime(red_cross$On_scene,red_cross$Verified, units = "min")
+# creates a new variable for the time the Red Cross is at the incident in minutes
 red_cross$time_of_inc<-difftime(red_cross$Departed, red_cross$On_scene, units = "min")
+# creates a new data frame from the red cross that makes all the timestamp variable be after 2014 and on
+# as well as make sure that the time to and time of variable is not negative
 red_cross_time <-red_cross %>%
   mutate(Verified = if_else(Verified > ymd("2013-12-31"), Verified, as.POSIXct(NA)), 
          Dispatched = ifelse(Dispatched > ymd("2013-12-31"), Dispatched, as.POSIXct(NA)),
@@ -179,8 +184,9 @@ red_cross_time <-red_cross %>%
          Departed = ifelse(Departed > ymd("2013-12-31"), Departed, as.POSIXct(NA)),
          time_to_inc =ifelse(time_to_inc >-1,time_to_inc, as.POSIXct(NA)),
          time_of_inc = ifelse(time_of_inc >-1, time_of_inc, as.POSIXct(NA)))
-
+# look at the median time the Red Cross takes to get to the scene
 median(red_cross_time$time_to_inc, na.rm = T)
+# look at the median time the Red Cross spends at an incient
 median(red_cross_time$time_of_inc, na.rm = T)
 
 ```

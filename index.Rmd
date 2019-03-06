@@ -90,7 +90,7 @@ The code book will list each variable name with a description followed by the va
 
 ## Basic Cleaning
 Below is some R code for downloading the data and doing some basic cleaning.
-```{r basicclean}
+```{r basicclean, message=FALSE, warning=FALSE}
 require(RCurl)
 require(readr) 
 
@@ -100,10 +100,10 @@ red_cross <- read_csv(getURL("https://raw.githubusercontent.com/menawhalen/WiDS_
 
 ## Spatial Data 
 
-```{r spatialdata}
+```{r spatialdata, message=FALSE, warning=FALSE}
 #load necessary packages
 require(dplyr)
-require(raster) #key spatial data packages
+require(rgdal) #for spatial data
 require(RColorBrewer) #for heatmaps!
 
 #shp: spatial data ZIP FILE: contains several spatial data types for plotting
@@ -114,7 +114,9 @@ merge_spatial_data <- function(shp, pop_income_data, red_cross){
   #unzip zip file with several files necessary for plotting the zip code
   download.file(paste('https://raw.githubusercontent.com/menawhalen/WiDS_Data_Dive/master/', shp, sep = "/"), destfile = "geo_zipcodes.zip")
   system("unzip geo_zipcodes.zip")
-  spatial<- readOGR( dsn =  getwd()) 
+  
+  #here's your shapefile!
+  spatial <- readOGR( dsn =  getwd()) 
   
   
   other_data <- read_csv(getURL(paste('https://raw.githubusercontent.com/menawhalen/WiDS_Data_Dive/master/', pop_income_data, sep = "/")))

@@ -5,6 +5,8 @@ output:
   html_document:
     toc: true
     toc_float: true
+editor_options: 
+  chunk_output_type: console
 ---
 # Overview
 
@@ -157,5 +159,28 @@ merge_spatial_data <- function(shp, pop_income_data, red_cross){
 
 #LET'S TEST!
 merge_spatial_data('geo_zipcodes.zip', 'population_income.csv', red_cross)
+
+```
+
+
+
+## Timestamp Problems
+Some of the timestamp variables like Verified and  On_Scene have errors from encoding incorrectly upon data entry. They have timestamps that start in the year 1900 or have the time Red Cross learns about the incident happening after the Red Cross arrived on the scene of the incident or left the incident. This is leading to negative time for the Red Cross getting to the incident or negative time when the Red Cross is at the incident. Here is some code that changes those timestamp variables to be missing (NA) if they are before the dataset time period or lead to negative times to get to the scene or time at the incident. 
+```{r timestamp, warning=FALSE, message=FALSE}
+library(dplyr)
+library(lubridate)
+red_cross$time_to_inc<-difftime(red_cross$On_scene,red_cross$Verified, units = "min")
+red_cross$time_of_inc<-difftime(red_cross$Departed, red_cross$On_scene, units = "min")
+red_cross_time <-red_cross %>%
+  mutate(Verified = if_else(Verified > ymd("2013-12-31"), Verified, as.POSIXct(NA)), 
+         Dispatched = ifelse(Dispatched > ymd("2013-12-31"), Dispatched, as.POSIXct(NA)),
+         Responders_ID =ifelse(Responders_ID > ymd("2013-12-31"), Responders_ID, as.POSIXct(NA)),
+         On_scene = ifelse(On_scene > ymd("2013-12-31"), On_scene, as.POSIXct(NA)),
+         Departed = ifelse(Departed > ymd("2013-12-31"), Departed, as.POSIXct(NA)),
+         time_to_inc =ifelse(time_to_inc >-1,time_to_inc, as.POSIXct(NA)),
+         time_of_inc = ifelse(time_of_inc >-1, time_of_inc, as.POSIXct(NA)))
+
+median(red_cross_time$time_to_inc, na.rm = T)
+median(red_cross_time$time_of_inc, na.rm = T)
 
 ```

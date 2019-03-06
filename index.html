@@ -306,29 +306,43 @@ div.tocify {
 <h1>Let’s Get To Work… in R!</h1>
 <div id="basic-cleaning" class="section level2">
 <h2>Basic Cleaning</h2>
-<p>Below is some R code for downloading the data and doing some basic cleaning.</p>
-<pre class="r"><code># Libraries for reading URL and csv
+<p>Below is some R code for downloading already cleaned data. Has all dates and timestamps coded to be the correct type, also changed incident_num to an integer without a dash.</p>
+<pre class="r"><code>library(readr)
+download.file(&quot;https://raw.githubusercontent.com/menawhalen/WiDS_Data_Dive/master/Redcross.rds&quot;, 
+              &quot;Redcross.rds&quot;,
+              method=&quot;curl&quot;)
+
+red_cross&lt;- read_rds(&quot;Redcross.rds&quot;)
+# looking at each column to see how many NA's are in the column
+na_count &lt;-sapply(red_cross, function(y) sum(length(which(is.na(y))))) </code></pre>
+<p>Below is the code to create the cleaned rds file.</p>
+<pre class="r"><code># Libraries for reading URL and csv and cleaning 
 library(RCurl) 
-library(readr)
+library(dplyr)
+library(janitor)
 # read in the text file for red cross from github 
 red_cross_text&lt;-getURL(&quot;https://raw.githubusercontent.com/menawhalen/WiDS_Data_Dive/master/Redcross.csv&quot;)
 # puts into a csv with the first row of table being the column names, seperated by &quot;,&quot;
-red_cross&lt;-read.csv(text = red_cross_text, header = TRUE, sep = &quot;,&quot;)
-# puts all the dates and time stamps in the right format for R
-red_cross$Date&lt;-as.Date(red_cross$Date, format = &quot;%m/%d/%Y&quot;)
-red_cross$Verified&lt;-as.POSIXct(red_cross$Verified, format = &quot;%m/%d/%Y %H:%M&quot;)
-red_cross$Dispatched&lt;-as.POSIXct(red_cross$Dispatched, format = &quot;%m/%d/%Y %H:%M&quot;)
-red_cross$Responders_ID&lt;-as.POSIXct(red_cross$Responders_ID, format = &quot;%m/%d/%Y %H:%M&quot;)
-red_cross$On_scene&lt;-as.POSIXct(red_cross$On_scene, format = &quot;%m/%d/%Y %H:%M&quot;)
-red_cross$Departed&lt;-as.POSIXct(red_cross$Departed, format = &quot;%m/%d/%Y %H:%M&quot;)
+red_cross&lt;-read.csv(text = red_cross_text, header = TRUE, sep = &quot;,&quot;) %&gt;%
+  as_tibble() %&gt;% # puts into a tibble
+  clean_names() %&gt;% #makes names lowercase column names
+  # puts all the dates and time stamps in the right format for R
+  mutate(date=as.Date(date, format = &quot;%m/%d/%Y&quot;),
+         verified=as.POSIXct(verified, format = &quot;%m/%d/%Y %H:%M&quot;),
+         dispatched=as.POSIXct(dispatched, format = &quot;%m/%d/%Y %H:%M&quot;),
+         responders_id=as.POSIXct(responders_id, format = &quot;%m/%d/%Y %H:%M&quot;),
+         on_scene=as.POSIXct(on_scene, format = &quot;%m/%d/%Y %H:%M&quot;),
+         departed=as.POSIXct(departed, format = &quot;%m/%d/%Y %H:%M&quot;),
+         incident_num=as.character(incident_num),
+         incident_num=as.integer(gsub(&quot;-&quot;, &quot;&quot;, incident_num))) # makes incident number a integer
 
-# looking at each column to see how many NA's are in the column
-na_count &lt;-sapply(red_cross, function(y) sum(length(which(is.na(y))))) </code></pre>
+write_rds(red_cross, &quot;Redcross.rds&quot;)</code></pre>
 </div>
 <div id="spatial-data" class="section level2">
 <h2>Spatial Data</h2>
 <pre class="r"><code>#load necessary packages
 require(dplyr)
+require(RCurl)
 require(rgdal) #for spatial data
 require(RColorBrewer) #for heatmaps!
 

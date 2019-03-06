@@ -20,12 +20,13 @@ Below is a plot of number of incidents per month from 2014-2018 that the Illinoi
 
 The data is described more below in the [the data](#the-data). We will give you a zip file to [download](#download) that has: 
 
-* Red Cross incident data
-* Shapefile for zip codes in Chicago, and a [spatial data cleaning R script](#spatial-data) that merges this with any outside csv (Red Cross or Census) based on zip code
+* Red Cross incident data 
 * [Data cleaning](#basic-cleaning) script in R
+* Shapefile for zip codes in Chicago, and an example [spatial data cleaning R script](#spatial-data) that merges this with an outside csv based on zip code
+* Data by zipcode from 2006-2010 ACS that includes Mean Income, Median Income, and Population for each zip 
 * Weather data
 * National fire data
-* ECON DATA?
+
 
 
 ## Goal
@@ -88,5 +89,61 @@ The code book will list each variable name with a description followed by the va
 # Let's Get To Work... in R!
 
 ## Basic Cleaning
+Below is some R code for downloading the data and doing some basic cleaning.
+```{r basicclean, message=FALSE, warning=FALSE}
+require(RCurl)
+require(readr) 
+
+red_cross <- read_csv(getURL("https://raw.githubusercontent.com/menawhalen/WiDS_Data_Dive/master/Redcross.csv"))
+
+```
 
 ## Spatial Data 
+
+```{r spatialdata, message=FALSE, warning=FALSE}
+#load necessary packages
+require(dplyr)
+require(rgdal) #for spatial data
+require(RColorBrewer) #for heatmaps!
+
+#shp: spatial data ZIP FILE: contains several spatial data types for plotting
+#pop_income_data is from 2006-2010 ACS and has the mean income, median income, and population for a zip
+## OUTPUT: will generate heatmap of Chicago zipcodes, with number of incidents scaled to the population in the zip
+merge_spatial_data <- function(shp, pop_income_data, red_cross){
+  
+  #unzip zip file with several files necessary for plotting the zip code
+  download.file(paste('https://raw.githubusercontent.com/menawhalen/WiDS_Data_Dive/master/', shp, sep = "/"), destfile = "geo_zipcodes.zip")
+  system("unzip geo_zipcodes.zip")
+  
+  #here's your shapefile!
+  spatial <- readOGR( dsn =  getwd()) 
+  
+  
+  other_data <- read_csv(getURL(paste('https://raw.githubusercontent.com/menawhalen/WiDS_Data_Dive/master/', pop_income_data, sep = "/")))
+  
+  #merge demographic (population + income) data with shapefile
+  shp_merged <- merge(spatial, other_data, by.x = 'zip', by.y = 'Zip')
+  
+  #merge in Red Cross Data with shapefile
+  shp_merged@data <- merge(shp_merged@data, red_cross, by.x = 'zip', by.y = 'ZIP')
+  
+  p <- colorRampPalette(c("white", "red"))(128)
+  palette(p)
+  
+  #calculate the Red Cross incident rate per each zip, scaled by population
+  zip_and_rate <- shp_merged@data %>%
+    group_by(zip, Pop) %>% 
+    summarise(count = n()) %>% summarise(rate = count/Pop)
+  
+  # Scale the total population to the palette
+  zip_and_rate <- na.omit(zip_and_rate)
+  cols <- (zip_and_rate$rate - min(zip_and_rate$rate))/diff(range(zip_and_rate$rate))*120 + 1
+  plot(shp_merged, col = cols)
+  
+}
+
+
+#LET'S TEST!
+merge_spatial_data('geo_zipcodes.zip', 'population_income.csv', red_cross)
+
+```

@@ -35,7 +35,7 @@ ggplot(test, aes(month, n)) + geom_line() + xlab("") + ylab("Monthly Incidents")
 
 **NOTE**: This is not a question that we or the Red Cross definetively know the answer to. Feel free to be as creative as time allows!
 
-Current Red Cross hypotheses include: weather, more stable economic trends, successful implentation of preparedness initiatives (including the Red Cross’s Home Fire Campaign), a reduction in fire-related crimes, or better cooking habits. **You can identify other data sources!**
+Current Red Cross hypotheses include: weather, more stable economic trends, successful implentation of preparedness initiatives (including the Red Cross’s Home Fire Campaign), a reduction in fire-related crimes, or better cooking habits. We do not provide datasets on these. **You can also identify other data sources!**
 
 We will give you a zip file to [download](#download) that has: 
  
@@ -279,3 +279,8 @@ median(red_cross_time$time_to_inc, na.rm = T)
 median(red_cross_time$time_of_inc, na.rm = T)
 
 ```
+
+
+#Acknowledgments
+
+We'd like to thank Jim McGowan of the Chicago/Northern Illinois Red Cross for their partnership, and Kisa Kowal, Arend Kuyper, Karen Smilowitz, and Reut Nocham for their technical/logistical support. 

@@ -437,27 +437,28 @@ il_map_df %&gt;%
 require(lubridate)
 
 # creates a new variable for the time it takes for the Red Cross to be on the scene in minutes
-red_cross$time_to_inc &lt;- difftime(red_cross$On_scene,red_cross$Verified, units = &quot;min&quot;)
+red_cross$time_to_inc &lt;- difftime(red_cross$on_scene, red_cross$verified, units = &quot;min&quot;)
 
 # creates a new variable for the time the Red Cross is at the incident in minutes
-red_cross$time_of_inc &lt;- difftime(red_cross$Departed, red_cross$On_scene, units = &quot;min&quot;)
+red_cross$time_of_inc &lt;- difftime(red_cross$departed, red_cross$on_scene, units = &quot;min&quot;)
 
 # creates a new data frame from the red cross that makes all the timestamp variable be after 2014 and on
 # as well as make sure that the time to and time of variable is not negative
 red_cross_time &lt;-red_cross %&gt;%
-  mutate(Verified = if_else(Verified &gt; ymd(&quot;2013-12-31&quot;), Verified, as.POSIXct(NA)), 
-         Dispatched = ifelse(Dispatched &gt; ymd(&quot;2013-12-31&quot;), Dispatched, as.POSIXct(NA)),
-         Responders_ID =ifelse(Responders_ID &gt; ymd(&quot;2013-12-31&quot;), Responders_ID, as.POSIXct(NA)),
-         On_scene = ifelse(On_scene &gt; ymd(&quot;2013-12-31&quot;), On_scene, as.POSIXct(NA)),
-         Departed = ifelse(Departed &gt; ymd(&quot;2013-12-31&quot;), Departed, as.POSIXct(NA)),
+  mutate(verified = if_else(verified &gt; ymd(&quot;2013-12-31&quot;), verified, as.POSIXct(NA)), 
+         dispatched = ifelse(dispatched &gt; ymd(&quot;2013-12-31&quot;), dispatched, as.POSIXct(NA)),
+         responders_id =ifelse(responders_id &gt; ymd(&quot;2013-12-31&quot;), responders_id, as.POSIXct(NA)),
+         on_scene = ifelse(on_scene &gt; ymd(&quot;2013-12-31&quot;), on_scene, as.POSIXct(NA)),
+         departed = ifelse(departed &gt; ymd(&quot;2013-12-31&quot;), departed, as.POSIXct(NA)),
          time_to_inc =ifelse(time_to_inc &gt;-1,time_to_inc, as.POSIXct(NA)),
          time_of_inc = ifelse(time_of_inc &gt;-1, time_of_inc, as.POSIXct(NA)))
 
 # look at the median time the Red Cross takes to get to the scene
-median(red_cross_time$time_to_inc, na.rm = T)
-
-# look at the median time the Red Cross spends at an incient
+median(red_cross_time$time_to_inc, na.rm = T)</code></pre>
+<pre><code>## [1] 82</code></pre>
+<pre class="r"><code># look at the median time the Red Cross spends at an incient
 median(red_cross_time$time_of_inc, na.rm = T)</code></pre>
+<pre><code>## [1] 62</code></pre>
 </div>
 </div>
 

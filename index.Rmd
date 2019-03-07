@@ -247,24 +247,24 @@ The two main errors were:
 
 The below code changes these errornous timestamps to `NA`.
 
-```{r timestamp, warning=FALSE, message=FALSE, eval=F}
+```{r timestamp, warning=FALSE, message=FALSE, eval=T}
 require(dplyr)
 require(lubridate)
 
 # creates a new variable for the time it takes for the Red Cross to be on the scene in minutes
-red_cross$time_to_inc <- difftime(red_cross$On_scene,red_cross$Verified, units = "min")
+red_cross$time_to_inc <- difftime(red_cross$on_scene, red_cross$verified, units = "min")
 
 # creates a new variable for the time the Red Cross is at the incident in minutes
-red_cross$time_of_inc <- difftime(red_cross$Departed, red_cross$On_scene, units = "min")
+red_cross$time_of_inc <- difftime(red_cross$departed, red_cross$on_scene, units = "min")
 
 # creates a new data frame from the red cross that makes all the timestamp variable be after 2014 and on
 # as well as make sure that the time to and time of variable is not negative
 red_cross_time <-red_cross %>%
-  mutate(Verified = if_else(Verified > ymd("2013-12-31"), Verified, as.POSIXct(NA)), 
-         Dispatched = ifelse(Dispatched > ymd("2013-12-31"), Dispatched, as.POSIXct(NA)),
-         Responders_ID =ifelse(Responders_ID > ymd("2013-12-31"), Responders_ID, as.POSIXct(NA)),
-         On_scene = ifelse(On_scene > ymd("2013-12-31"), On_scene, as.POSIXct(NA)),
-         Departed = ifelse(Departed > ymd("2013-12-31"), Departed, as.POSIXct(NA)),
+  mutate(verified = if_else(verified > ymd("2013-12-31"), verified, as.POSIXct(NA)), 
+         dispatched = ifelse(dispatched > ymd("2013-12-31"), dispatched, as.POSIXct(NA)),
+         responders_id =ifelse(responders_id > ymd("2013-12-31"), responders_id, as.POSIXct(NA)),
+         on_scene = ifelse(on_scene > ymd("2013-12-31"), on_scene, as.POSIXct(NA)),
+         departed = ifelse(departed > ymd("2013-12-31"), departed, as.POSIXct(NA)),
          time_to_inc =ifelse(time_to_inc >-1,time_to_inc, as.POSIXct(NA)),
          time_of_inc = ifelse(time_of_inc >-1, time_of_inc, as.POSIXct(NA)))
 

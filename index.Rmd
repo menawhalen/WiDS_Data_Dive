@@ -37,13 +37,16 @@ ggplot(test, aes(month, n)) + geom_line() + xlab("") + ylab("Monthly Incidents")
 
 Current Red Cross hypotheses include: weather, more stable economic trends, successful implentation of preparedness initiatives (including the Red Cross’s Home Fire Campaign), a reduction in fire-related crimes, or better cooking habits. **You can identify other data sources!**
 
-The data is described more below in the [the data](#the-data). We will give you a zip file to [download](#download) that has: 
-
-* Red Cross incident data 
-* [Data cleaning](#basic-cleaning) script in R
-* Shapefile for zip codes in Northern Illinois, and an example [spatial mapping R script](#spatial-data) 
+We will give you a zip file to [download](#download) that has: 
+ 
+* Red Cross incident data (The is described more [below](#the-data)).
+* Shapefile for zip codes in Illinois (**NOTE**: you need ALL of the file types, not just the *.shp!)
 * Data by zipcode from 2006-2010 ACS that includes Mean Income, Median Income, and Population for each zip code
 
+Below you'll also find:
+
+* a [data cleaning R script](#basic-cleaning)
+* an example [spatial mapping R script](#spatial-data) 
 
 ## Goal
 
@@ -53,7 +56,7 @@ Your team will need to create 2-3 slides (keep it simple) with your best visuali
 
 Please email your 2 slides with the email subject: "DATA DIVE", and a list of team members names to <als1@u.northwestern.edu> by 6:45 pm. 
 
-Winner gets...bragging rights and eternal WiDS-dom and fame. 
+A winning team will be announced shortly before 9 pm. Winner gets...bragging rights and eternal WiDS-dom and fame. 
 
 
 # The Data
@@ -98,7 +101,7 @@ The code book will list each variable name with a description followed by the va
   * **on_scene** - The time and date the volunteer response team arrives at an incident scene (*Timestamp dd/mm/yyyy 00:00:00 AM*)
   * **departed** - The time and date the volunteer response team departs the incident scene (*Timestamp dd/mm/yyyy 00:00:00 AM*)
 
-## Download
+## <a href="WiDS2019.zip" download>Download</a>
 
 
 # General Workflow Suggestions
@@ -114,7 +117,8 @@ The code book will list each variable name with a description followed by the va
 # Let's Get To Work... in R!
 
 ## Basic Cleaning
-Below is some R code for downloading already cleaned data. Has all dates and timestamps coded to be the correct type, also changed incident_num to an integer without a dash.
+Below is some R code for downloading already cleaned data. Has all dates and timestamps coded to be the correct type, also changed `incident_num` to an integer without a dash.
+
 ```{r download, warning=FALSE, message=FALSE}
 require(readr)
 require(naniar) #for all you R nerds, here is the a new package that is great for handling missingness

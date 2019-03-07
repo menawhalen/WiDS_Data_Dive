@@ -10,13 +10,26 @@ editor_options:
 ---
 # Overview
 
-Welcome to the WiDS Data Dive, in partnership with the Chicago/Illinois Red Cross.
+Welcome to the WiDS Data Dive, in partnership with the Chicago/Northern Illinois Red Cross.
 
 You will have **90 minutes** to complete the following task. 
 
-Below is a plot of number of incidents per month from 2014-2018 that the Illinois Red Cross responded to. As you can see, even ignoring seasonality, we observe a *drop* in total incidents in 2018. Our questions is simple: **Why**?
+Below is a plot of number of incidents per month from 2014-2018 that the Chicago/Northern Illinois Red Cross responded to. As you can see, even ignoring seasonality, we observe a *drop* in total incidents in 2018. Our questions is simple: **Why**?
 
-![](motivating_plot.png)
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+#time series, aggregated by month
+require(readr)
+require(dplyr)
+require(lubridate)
+require(ggplot2)
+
+red_cross<- read_rds("Redcross.rds")
+test<-red_cross %>% group_by(month=floor_date(date, "month")) %>% tally()
+
+#The motivating plot!! see the drop in 2018
+ggplot(test, aes(month, n)) + geom_line() + xlab("") + ylab("Monthly Incidents") + ggtitle('Monthly Incidents responded to by the Chicago/Northern Illinois Red Cross, 2014-2018') +  geom_smooth(method = "loess", size = 1.5, se=FALSE)
+
+```
 
 **NOTE**: This is not a question that we or the Red Cross definetively know the answer to. Feel free to be as creative as time allows!
 
@@ -24,7 +37,7 @@ The data is described more below in the [the data](#the-data). We will give you 
 
 * Red Cross incident data 
 * [Data cleaning](#basic-cleaning) script in R
-* Shapefile for zip codes in Chicago, and an example [spatial data cleaning R script](#spatial-data) that merges this with an outside csv based on zip code
+* Shapefile for zip codes in Northern Illinois, and an example [spatial mapping R script](#spatial-data) 
 * Data by zipcode from 2006-2010 ACS that includes Mean Income, Median Income, and Population for each zip code
 
 ## Goal
@@ -40,9 +53,9 @@ Winner gets...bragging rights and eternal WiDS-dom and fame.
 ## Codebook
 The code book will list each variable name with a description followed by the variable type in italics. If variable is categorical responses will be listed.
 
-  * date - The date an incident report was created *Date dd/mm/yyyy*
-  * incident_num - Assigned per incident by DCSOps, the Red Cross incident management application. The first two numbers represent the fiscal year. The last four are sequential starting at the beginning of the fiscal year (July 1). Note that duplicate and invalid incidents as well as events to which the Red Cross deems a response is not needed (like a fire in a commercial or institutional building) have been removed from the dataset *Numeric*
-  * incident_type - The type of situation that lead to an incident *Character*
+  * **date** - The date an incident report was created (*Date dd/mm/yyyy*)
+  * **incident_num** - Assigned per incident by DCSOps, the Red Cross incident management application. The first two numbers represent the fiscal year. The last four are sequential starting at the beginning of the fiscal year (July 1). Note that duplicate and invalid incidents as well as events to which the Red Cross deems a response is not needed (like a fire in a commercial or institutional building) have been removed from the dataset (*Numeric*)
+  * **incident_type** - The type of situation that lead to an incident (*Character*)
       + Blizzard
       + Building Collapse
       + Explosion
@@ -56,35 +69,32 @@ The code book will list each variable name with a description followed by the va
       + Tornado
       + Transportation -Typically, a vehicle into a residential structure or a train derailment
       + Vacate - An incident in which a disaster has not occurred but living conditions are deemed unsafe for residents
-  * city - Location city of incident (*Character*)
-  * state - Location state of incident (*Character*)
-  * zip - ZIP Code of where the incident occured. (*Numeric*)
-  * County - The county where the incident occured (*Character*)
-  * latitude - Latitude of incident (*Numeric*)
-  * longitude - Longitude of incident (*Numeric*)
-  * destroyed - Number of residential units destroyed
-  * major - Number of residential units suffering major damage
-  * minor - Number of residential units suffering minor damage
-  * affected - Number of residential units nominally affected
-  * injured - Number of people injured from the incident (*Numeric*)
-  * hospitalized - Number of people hospitalized from the incident (*Numeric*)
-  * desceased - Number of people that died from incident (*Numeric*)
-  * adults - Number of adults in the incident (*Numeric*)
-  * children - Number of children in the incident (*Numeric*)
-  * families - Number of families in the incident (*Numeric*)
-  * assistance - Amount of total financial assistance provided *Numeric* 
-  * verified - The time and date the incident is verified by a Red Cross dispatcher (*Timestamp dd/mm/yyyy 00:00:00 AM*)
-  * dispatched - The time and date it is determined by a Red Cross dispatcher that a response is required (*Timestamp dd/mm/yyyy 00:00:00 AM*)
-  * responders_ID - The time and date a volunteer response team is identified by a Red Cross dispatcher (*Timestamp dd/mm/yyyy 00:00:00 AM*)
-  * on_scene - The time and date the volunteer response team arrives at an incident scene (*Timestamp dd/mm/yyyy 00:00:00 AM*)
-  * departed - The time and date the volunteer response team departs the incident scene (*Timestamp dd/mm/yyyy 00:00:00 AM*)
+  * **city** - Location city of incident (*Character*)
+  * **state** - Location state of incident (*Character*)
+  * **zip** - ZIP Code of where the incident occured. (*Numeric*)
+  * **county** - The county where the incident occured (*Character*)
+  * **destroyed** - Number of residential units destroyed
+  * **major** - Number of residential units suffering major damage
+  * **minor** - Number of residential units suffering minor damage
+  * **affected** - Number of residential units nominally affected
+  * **injured** - Number of people injured from the incident (*Numeric*)
+  * **hospitalized** - Number of people hospitalized from the incident (*Numeric*)
+  * **desceased** - Number of people that died from incident (*Numeric*)
+  * **adults** - Number of adults in the incident (*Numeric*)
+  * **children** - Number of children in the incident (*Numeric*)
+  * **families** - Number of families in the incident (*Numeric*)
+  * **assistance** - Amount of total financial assistance provided *Numeric* 
+  * **verified** - The time and date the incident is verified by a Red Cross dispatcher (*Timestamp dd/mm/yyyy 00:00:00 AM*)
+  * **dispatched** - The time and date it is determined by a Red Cross dispatcher that a response is required (*Timestamp dd/mm/yyyy 00:00:00 AM*)
+  * **responders_ID** - The time and date a volunteer response team is identified by a Red Cross dispatcher (*Timestamp dd/mm/yyyy 00:00:00 AM*)
+  * **on_scene** - The time and date the volunteer response team arrives at an incident scene (*Timestamp dd/mm/yyyy 00:00:00 AM*)
+  * **departed** - The time and date the volunteer response team departs the incident scene (*Timestamp dd/mm/yyyy 00:00:00 AM*)
 
-#General Workflow Suggestions
+# General Workflow Suggestions
 
 
 
 ## Download
-
 
 
 
@@ -139,7 +149,7 @@ write_rds(red_cross, "Redcross.rds")
 
 Our incident data has as a zip code variable. The below example code joins Red Cross incident data with spatial data based on zip code, and makes a map of the number of incidents in 2018. 
 
-The below code also creates a data frame (`zip_income_pop_dat`)from the ACS Community Survey (ACS) 2010 Data for income + population (mean, median) per zip. It should be ready for you to join + map away! 
+The below code also creates a data frame (`zip_income_pop_dat`) from the ACS Community Survey (ACS) 2010 Data for income (mean, median) and population  per zip. It should be ready for you to join + map away! 
 
 ```{r spatialdata, message=FALSE, warning=FALSE}
 # Illinois Zip Code Map ----------------------------------------------------
@@ -214,12 +224,12 @@ il_map_df %>%
 
 ## Timestamp Problems
 
-Some of the timestamp variables like `Verified` and  `On_Scene` have errors from encoding incorrectly upon data entry.
+Some of the timestamp variables such as `verified` and  `on_scene` have errors from incorrect data entry.
 
 The two main errors were: 
 
   * timestamps that start in the year 1900 (not in 2014-2018 )
-  * "arrival of Red Cross" timestamps LATER than "dispatched (left to go to incident)" (not logical)
+  * `on_scene` (Red Cross arrives at the incident) timestamps LATER than `dispatched` (Red Cross hears about incident and sends volunteers). This doesn't make any sesne!
 
 The below code changes these errornous timestamps to `NA`.
 

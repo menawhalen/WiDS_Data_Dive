@@ -27,11 +27,9 @@ red_cross<- read_rds("Redcross.rds")
 test<-red_cross %>% group_by(month=floor_date(date, "month")) %>% tally()
 
 #The motivating plot!! see the drop in 2018
-<<<<<<< HEAD
-ggplot(test, aes(month, n)) + geom_line() + xlab("") + ylab("Monthly Incidents") + ggtitle('Monthly Incidents responded to by the Chicago/Northern Illinois Red Cross \n 2014-2018') +  geom_smooth(method = "loess", size = 1.5, se=FALSE)
-=======
+
 ggplot(test, aes(month, n)) + geom_line() + xlab("") + ylab("Monthly Incidents") + ggtitle('Chicago/Northern Illinois Red Cross Monthly Incidents, 2014-2018') +  geom_smooth(method = "loess", size = 1.5, se=FALSE)
->>>>>>> abbys_branch
+
 
 ```
 
@@ -173,6 +171,7 @@ The below code also creates a data frame (`zip_income_pop_dat`) from the ACS Com
 require(tidyverse)
 require(rgdal)
 require(maptools)
+require(rgeos)
 require(maps)
 require(mapproj)
 require(ggthemes)

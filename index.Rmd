@@ -27,11 +27,13 @@ red_cross<- read_rds("Redcross.rds")
 test<-red_cross %>% group_by(month=floor_date(date, "month")) %>% tally()
 
 #The motivating plot!! see the drop in 2018
-ggplot(test, aes(month, n)) + geom_line() + xlab("") + ylab("Monthly Incidents") + ggtitle('Monthly Incidents responded to by the Chicago/Northern Illinois Red Cross, 2014-2018') +  geom_smooth(method = "loess", size = 1.5, se=FALSE)
+ggplot(test, aes(month, n)) + geom_line() + xlab("") + ylab("Monthly Incidents") + ggtitle('Chicago/Northern Illinois Red Cross Monthly Incidents, 2014-2018') +  geom_smooth(method = "loess", size = 1.5, se=FALSE)
 
 ```
 
 **NOTE**: This is not a question that we or the Red Cross definetively know the answer to. Feel free to be as creative as time allows!
+
+Current Red Cross hypotheses include: weather, more stable economic trends, successful implentation of preparedness initiatives (including the Red Cross’s Home Fire Campaign), a reduction in fire-related crimes, or better cooking habits. **You can identify other data sources!**
 
 The data is described more below in the [the data](#the-data). We will give you a zip file to [download](#download) that has: 
 
@@ -40,8 +42,12 @@ The data is described more below in the [the data](#the-data). We will give you 
 * Shapefile for zip codes in Northern Illinois, and an example [spatial mapping R script](#spatial-data) 
 * Data by zipcode from 2006-2010 ACS that includes Mean Income, Median Income, and Population for each zip code
 
+
 ## Goal
-Your team will need to create 2-3 slides (keep it simple) with your best visualization and text takeaways. 
+
+**NOTE**: This is not a modeling exercise; we simply are trying to look into interesting pathways to explore further. 
+
+Your team will need to create 2-3 slides (keep it simple) with your best visualization and text takeaways and/or further inquiries. 
 
 Please email your 2 slides with the email subject: "DATA DIVE", and a list of team members names to <als1@u.northwestern.edu> by 6:45 pm. 
 
@@ -90,11 +96,16 @@ The code book will list each variable name with a description followed by the va
   * **on_scene** - The time and date the volunteer response team arrives at an incident scene (*Timestamp dd/mm/yyyy 00:00:00 AM*)
   * **departed** - The time and date the volunteer response team departs the incident scene (*Timestamp dd/mm/yyyy 00:00:00 AM*)
 
+## Download
+
+
 # General Workflow Suggestions
 
-
-
-## Download
+1. Form teams!  
+2. Review doumentation and the [codebook](#codebook). 
+3. Spend about 10-15 minutes brainstorming: what things would be interesting to look at? What graphics would be useful?
+4. Break up investigative tasks. (maybe 2 people per task).
+5. Explore and implement!
 
 
 

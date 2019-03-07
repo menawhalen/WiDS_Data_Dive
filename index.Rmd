@@ -27,7 +27,7 @@ red_cross<- read_rds("Redcross.rds")
 test<-red_cross %>% group_by(month=floor_date(date, "month")) %>% tally()
 
 #The motivating plot!! see the drop in 2018
-ggplot(test, aes(month, n)) + geom_line() + xlab("") + ylab("Monthly Incidents") + ggtitle('Monthly Incidents responded to by the Chicago/Northern Illinois Red Cross, 2014-2018') +  geom_smooth(method = "loess", size = 1.5, se=FALSE)
+ggplot(test, aes(month, n)) + geom_line() + xlab("") + ylab("Monthly Incidents") + ggtitle('Monthly Incidents responded to by the Chicago/Northern Illinois Red Cross \n 2014-2018') +  geom_smooth(method = "loess", size = 1.5, se=FALSE)
 
 ```
 

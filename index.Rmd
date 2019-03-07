@@ -33,15 +33,15 @@ ggplot(test, aes(month, n)) + geom_line() + xlab("") + ylab("Monthly Incidents")
 
 ```
 
-**NOTE**: This is not a question that we or the Red Cross definetively know the answer to. Feel free to be as creative as time allows!
+**NOTE**: This is not a question that we or the Red Cross definitively know the answer to. Feel free to be as creative as time allows!
 
-Current Red Cross hypotheses include: weather, more stable economic trends, successful implentation of preparedness initiatives (including the Red Cross’s Home Fire Campaign), a reduction in fire-related crimes, or better cooking habits. We do not provide datasets on these. **You can also identify other data sources!**
+Current Red Cross hypotheses include: weather, more stable economic trends, successful implementation of preparedness initiatives (including the Red Cross’s Home Fire Campaign), a reduction in fire-related crimes, or better cooking habits. We do not provide datasets on these. **You can also identify other data sources!**
 
 We will give you a zip file to [download](#download) that has: 
  
 * Red Cross incident data (The is described more [below](#the-data)).
 * Shapefile for zip codes in Illinois (**NOTE**: you need ALL of the file types, not just the *.shp!)
-* Data by zipcode from 2006-2010 ACS that includes Mean Income, Median Income, and Population for each zip code
+* Data by zip code from 2006-2010 ACS that includes Mean Income, Median Income, and Population for each zip code
 
 Below you'll also find:
 
@@ -62,7 +62,7 @@ A winning team will be announced shortly before 9 pm. Winner gets...bragging rig
 # The Data
 
 ## Codebook
-The code book will list each variable name with a description followed by the variable type in italics. If variable is categorical responses will be listed.
+The code book will list each variable name with a description followed by the variable type in italics. If variable is categorical, each possible response will be listed.
 
   * **date** - The date an incident report was created (*Date dd/mm/yyyy*)
   * **incident_num** - Assigned per incident by DCSOps, the Red Cross incident management application. The first two numbers represent the fiscal year. The last four are sequential starting at the beginning of the fiscal year (July 1). Note that duplicate and invalid incidents as well as events to which the Red Cross deems a response is not needed (like a fire in a commercial or institutional building) have been removed from the dataset (*Numeric*)
@@ -82,8 +82,8 @@ The code book will list each variable name with a description followed by the va
       + Vacate - An incident in which a disaster has not occurred but living conditions are deemed unsafe for residents
   * **city** - Location city of incident (*Character*)
   * **state** - Location state of incident (*Character*)
-  * **zip** - ZIP Code of where the incident occured. (*Numeric*)
-  * **county** - The county where the incident occured (*Character*)
+  * **zip** - ZIP Code of where the incident occurred. (*Numeric*)
+  * **county** - The county where the incident occurred (*Character*)
   * **destroyed** - Number of residential units destroyed
   * **major** - Number of residential units suffering major damage
   * **minor** - Number of residential units suffering minor damage
@@ -106,9 +106,9 @@ The code book will list each variable name with a description followed by the va
 
 # General Workflow Suggestions
 
-1. Form teams!  
-2. Review doumentation and the [codebook](#codebook). 
-3. Spend about 10-15 minutes brainstorming: what things would be interesting to look at? What graphics would be useful?
+1. Form team with at least one team leader. 
+2. Review documentation and the [codebook](#codebook). 
+3. Spend about 10-15 minutes brainstorming: What things would be interesting to look at? What graphics would be useful?
 4. Break up investigative tasks. (maybe 2 people per task).
 5. Explore and implement!
 
@@ -117,7 +117,7 @@ The code book will list each variable name with a description followed by the va
 # Let's Get To Work... in R!
 
 ## Basic Cleaning
-Below is some R code for downloading already cleaned data. Has all dates and timestamps coded to be the correct type, also changed `incident_num` to an integer without a dash.
+Below is some R code for downloading already cleaned data. It has all dates and time stamps coded to be the correct type, also changed `incident_num` to an integer without a dash.
 
 ```{r download, warning=FALSE, message=FALSE}
 require(readr)
@@ -240,16 +240,16 @@ il_map_df %>%
 
 
 
-## Timestamp Problems
+## Time stamp Problems
 
-Some of the timestamp variables such as `verified` and  `on_scene` have errors from incorrect data entry.
+Some of the time stamp variables such as `verified` and  `on_scene` have errors from incorrect data entry.
 
 The two main errors were: 
 
-  * timestamps that start in the year 1900 (not in 2014-2018 )
-  * `on_scene` (Red Cross arrives at the incident) timestamps LATER than `dispatched` (Red Cross hears about incident and sends volunteers). This doesn't make any sesne!
+  * time stamps that start in the year 1900 (not in 2014-2018 )
+  * `on_scene` (Red Cross arrives at the incident) time stamps LATER than `dispatched` (Red Cross hears about incident and sends volunteers). This doesn't make any sense.
 
-The below code changes these errornous timestamps to `NA`.
+The below code changes these erroneous time stamps to `NA`.
 
 ```{r timestamp, warning=FALSE, message=FALSE, eval=T}
 require(dplyr)

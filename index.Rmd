@@ -133,51 +133,68 @@ write_rds(red_cross, "Redcross.rds")
 ## Spatial Data 
 
 ```{r spatialdata, message=FALSE, warning=FALSE}
-#load necessary packages
-require(dplyr)
+# Chicago ZIp Code Map ----------------------------------------------------
+
+# Laod package ------------------------------------------------------------
+require(tidyverse)
+require(rgdal)
+require(janitor)
+require(maptools)
+require(maps)
+require(mapproj)
+require(ggthemes)
+require(naniar)
 require(RCurl)
-require(rgdal) #for spatial data
-require(RColorBrewer) #for heatmaps!
+require(lubridate)
+require(hms)
 
-#shp: spatial data ZIP FILE: contains several spatial data types for plotting
-#pop_income_data is from 2006-2010 ACS and has the mean income, median income, and population for a zip
-## OUTPUT: will generate heatmap of Chicago zipcodes, with number of incidents scaled to the population in the zip
-merge_spatial_data <- function(shp, pop_income_data, red_cross){
+download.file("https://raw.githubusercontent.com/menawhalen/WiDS_Data_Dive/master/Redcross.rds", 
+              "data/Redcross.rds",
+              method="curl")
+keep_zip_codes <- read_rds("data/Redcross.rds") %>% 
+  as_tibble() %>% 
+  clean_names() %>% 
+  mutate(zip = zip %>% as.character()) %>% 
+  select(zip)
+
+# Forming Chicago Zip Map Tibble ------------------------------------------
+il_map_dat <- readOGR(dsn="data/tl_2010_17_zcta510/")
+il_map_dat@data$id <- rownames(il_map_dat@data)
+il_points <- fortify(il_map_dat, region = "ZCTA5CE10") %>% 
+  as_tibble() %>% 
+  filter(id %in% keep_zip_codes$zip)
   
-  #unzip zip file with several files necessary for plotting the zip code
-  download.file(paste('https://raw.githubusercontent.com/menawhalen/WiDS_Data_Dive/master/', shp, sep = "/"), destfile = "geo_zipcodes.zip")
-  system("unzip geo_zipcodes.zip")
-  
-  #here's your shapefile!
-  spatial <- readOGR( dsn =  getwd()) 
-  
-  
-  other_data <- read_csv(getURL(paste('https://raw.githubusercontent.com/menawhalen/WiDS_Data_Dive/master/', pop_income_data, sep = "/")))
-  
-  #merge demographic (population + income) data with shapefile
-  shp_merged <- merge(spatial, other_data, by.x = 'zip', by.y = 'Zip')
-  
-  #merge in Red Cross Data with shapefile
-  shp_merged@data <- merge(shp_merged@data, red_cross, by.x = 'zip', by.y = 'ZIP')
-  
-  p <- colorRampPalette(c("white", "red"))(128)
-  palette(p)
-  
-  #calculate the Red Cross incident rate per each zip, scaled by population
-  zip_and_rate <- shp_merged@data %>%
-    group_by(zip, Pop) %>% 
-    summarise(count = n()) %>% summarise(rate = count/Pop)
-  
-  # Scale the total population to the palette
-  zip_and_rate <- na.omit(zip_and_rate)
-  cols <- (zip_and_rate$rate - min(zip_and_rate$rate))/diff(range(zip_and_rate$rate))*120 + 1
-  plot(shp_merged, col = cols)
-  
-}
+il_map_df <- full_join(il_points, il_map_dat@data, by="id") %>% 
+  as_tibble() 
+
+zip_income_pop_dat <- read_csv(file = "data/population_income.csv") %>% 
+  clean_names() %>% 
+  mutate(zip = zip %>% as.character())
+
+red_cross <- read_rds("data/Redcross.rds") %>% 
+  as_tibble() %>% 
+  clean_names() %>% 
+  mutate(zip = zip %>% as.character())
+
+zip_raw_count <- red_cross %>% 
+  mutate(year = year(date)) %>% 
+  group_by(zip, year) %>% 
+  summarise(incident_count = n()) %>%
+  ungroup() %>% 
+  filter(year == 2018) %>% 
+  mutate(more_than_10 = case_when(incident_count <= 5 ~ "5",
+                                  incident_count <= 10 ~ "10",
+                                  TRUE ~ "alot"))
 
 
-#LET'S TEST!
-merge_spatial_data('geo_zipcodes.zip', 'population_income.csv', red_cross)
+il_map_df %>% 
+  left_join(zip_raw_count, by = c("id" = "zip")) %>% 
+  ggplot(aes(long, lat , group = group, fill = more_than_10)) + 
+    geom_polygon() +
+    geom_path(color="black") +
+    coord_quickmap() +
+    theme_map()
+
 
 ```
 

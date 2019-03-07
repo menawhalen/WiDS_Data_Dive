@@ -25,11 +25,7 @@ The data is described more below in the [the data](#the-data). We will give you 
 * Red Cross incident data 
 * [Data cleaning](#basic-cleaning) script in R
 * Shapefile for zip codes in Chicago, and an example [spatial data cleaning R script](#spatial-data) that merges this with an outside csv based on zip code
-* Data by zipcode from 2006-2010 ACS that includes Mean Income, Median Income, and Population for each zip 
-* Weather data
-* National fire data
-
-
+* Data by zipcode from 2006-2010 ACS that includes Mean Income, Median Income, and Population for each zip code
 
 ## Goal
 Your team will need to create 2-3 slides (keep it simple) with your best visualization and text takeaways. 
@@ -60,28 +56,32 @@ The code book will list each variable name with a description followed by the va
       + Tornado
       + Transportation -Typically, a vehicle into a residential structure or a train derailment
       + Vacate - An incident in which a disaster has not occurred but living conditions are deemed unsafe for residents
-  * city - Location city of incident *Character*
-  * state - Location state of incident *Character*
-  * zip - ZIP Code of where the incident occured. *Numeric*
-  * County - The county where the incident occured *Character*
-  * latitude - Latitude of incident *Numeric*
-  * longitude - Longitude of incident *Numeric*
+  * city - Location city of incident (*Character*)
+  * state - Location state of incident (*Character*)
+  * zip - ZIP Code of where the incident occured. (*Numeric*)
+  * County - The county where the incident occured (*Character*)
+  * latitude - Latitude of incident (*Numeric*)
+  * longitude - Longitude of incident (*Numeric*)
   * destroyed - Number of residential units destroyed
   * major - Number of residential units suffering major damage
   * minor - Number of residential units suffering minor damage
   * affected - Number of residential units nominally affected
-  * injured - Number of people injured from the incident *Numeric*
-  * hospitalized - Number of people hospitalized from the incident *Numeric*
-  * desceased - Number of people that died from incident *Numeric*
-  * adults - Number of adults in the incident *Numeric*
-  * children - Number of children in the incident *Numeric*
-  * families - Number of families in the incident *Numeric*
+  * injured - Number of people injured from the incident (*Numeric*)
+  * hospitalized - Number of people hospitalized from the incident (*Numeric*)
+  * desceased - Number of people that died from incident (*Numeric*)
+  * adults - Number of adults in the incident (*Numeric*)
+  * children - Number of children in the incident (*Numeric*)
+  * families - Number of families in the incident (*Numeric*)
   * assistance - Amount of total financial assistance provided *Numeric* 
-  * verified - The time and date the incident is verified by a Red Cross dispatcher *Timestamp dd/mm/yyyy 00:00:00 AM*
-  * dispatched - The time and date it is determined by a Red Cross dispatcher that a response is required *Timestamp dd/mm/yyyy 00:00:00 AM*
-  * responders_ID - The time and date a volunteer response team is identified by a Red Cross dispatcher *Timestamp dd/mm/yyyy 00:00:00 AM*
-  * on_scene - The time and date the volunteer response team arrives at an incident scene *Timestamp dd/mm/yyyy 00:00:00 AM*
-  * departed - The time and date the volunteer response team departs the incident scene *Timestamp dd/mm/yyyy 00:00:00 AM*
+  * verified - The time and date the incident is verified by a Red Cross dispatcher (*Timestamp dd/mm/yyyy 00:00:00 AM*)
+  * dispatched - The time and date it is determined by a Red Cross dispatcher that a response is required (*Timestamp dd/mm/yyyy 00:00:00 AM*)
+  * responders_ID - The time and date a volunteer response team is identified by a Red Cross dispatcher (*Timestamp dd/mm/yyyy 00:00:00 AM*)
+  * on_scene - The time and date the volunteer response team arrives at an incident scene (*Timestamp dd/mm/yyyy 00:00:00 AM*)
+  * departed - The time and date the volunteer response team departs the incident scene (*Timestamp dd/mm/yyyy 00:00:00 AM*)
+
+#General Workflow Suggestions
+
+
 
 ## Download
 
@@ -93,25 +93,30 @@ The code book will list each variable name with a description followed by the va
 ## Basic Cleaning
 Below is some R code for downloading already cleaned data. Has all dates and timestamps coded to be the correct type, also changed incident_num to an integer without a dash.
 ```{r download, warning=FALSE, message=FALSE}
-library(readr)
+require(readr)
+require(naniar) #for all you R nerds, here is the a new package that is great for handling missingness
+
 download.file("https://raw.githubusercontent.com/menawhalen/WiDS_Data_Dive/master/Redcross.rds", 
               "Redcross.rds",
               method="curl")
 
 red_cross<- read_rds("Redcross.rds")
-# looking at each column to see how many NA's are in the column
-na_count <-sapply(red_cross, function(y) sum(length(which(is.na(y))))) 
+
+missingness_info<-red_cross %>% miss_var_summary() #displays number and percent of NAs in each column 
 ```
 
 
 Below is the code to create the cleaned rds file.
+
 ```{r howtoclean, warning=FALSE, message=FALSE, eval=FALSE}
 # Libraries for reading URL and csv and cleaning 
-library(RCurl) 
-library(dplyr)
-library(janitor)
-# read in the text file for red cross from github 
+require(RCurl) 
+require(dplyr)
+require(janitor)
+
+# read in the text file for red cross from Github 
 red_cross_text<-getURL("https://raw.githubusercontent.com/menawhalen/WiDS_Data_Dive/master/Redcross.csv")
+
 # puts into a csv with the first row of table being the column names, seperated by ","
 red_cross<-read.csv(text = red_cross_text, header = TRUE, sep = ",") %>%
   as_tibble() %>% # puts into a tibble
@@ -132,46 +137,52 @@ write_rds(red_cross, "Redcross.rds")
 
 ## Spatial Data 
 
-```{r spatialdata, message=FALSE, warning=FALSE}
-# Chicago ZIp Code Map ----------------------------------------------------
+Our incident data has as a zip code variable. The below example code joins Red Cross incident data with spatial data based on zip code, and makes a map of the number of incidents in 2018. 
 
-# Laod package ------------------------------------------------------------
+The below code also creates a data frame (`zip_income_pop_dat`)from the ACS Community Survey (ACS) 2010 Data for income + population (mean, median) per zip. It should be ready for you to join + map away! 
+
+```{r spatialdata, message=FALSE, warning=FALSE}
+# Illinois Zip Code Map ----------------------------------------------------
+
+# Loading packages ------------------------------------------------------------
 require(tidyverse)
 require(rgdal)
-require(janitor)
 require(maptools)
 require(maps)
 require(mapproj)
 require(ggthemes)
-require(naniar)
 require(RCurl)
 require(lubridate)
+require(janitor)
 require(hms)
 
 download.file("https://raw.githubusercontent.com/menawhalen/WiDS_Data_Dive/master/Redcross.rds", 
-              "data/Redcross.rds",
+              "Redcross.rds",
               method="curl")
-keep_zip_codes <- read_rds("data/Redcross.rds") %>% 
+keep_zip_codes <- read_rds("Redcross.rds") %>% 
   as_tibble() %>% 
-  clean_names() %>% 
-  mutate(zip = zip %>% as.character()) %>% 
+  clean_names() %>%  #makes names lowercase column names
+  mutate(zip = zip %>% as.character()) %>% #we decide to make all zip codes
   select(zip)
 
 # Forming Chicago Zip Map Tibble ------------------------------------------
-il_map_dat <- readOGR(dsn="data/tl_2010_17_zcta510/")
+
+il_map_dat <- readOGR(dsn="tl_2010_17_zcta510.shp") #read in IL zip codes shapefile 
 il_map_dat@data$id <- rownames(il_map_dat@data)
-il_points <- fortify(il_map_dat, region = "ZCTA5CE10") %>% 
+il_points <- fortify(il_map_dat, region = "ZCTA5CE10") %>% #fortify helps us turn the map into data points in a data frame 
   as_tibble() %>% 
   filter(id %in% keep_zip_codes$zip)
   
+#creating mapping dataset 
 il_map_df <- full_join(il_points, il_map_dat@data, by="id") %>% 
   as_tibble() 
 
-zip_income_pop_dat <- read_csv(file = "data/population_income.csv") %>% 
-  clean_names() %>% 
-  mutate(zip = zip %>% as.character())
+#loads data with zip code, mean/median income and population
+zip_income_pop_dat <- read_csv(file = "population_income.csv") %>% 
+  clean_names() %>% #all lowercase
+  mutate(zip = zip %>% as.character()) #we choose to make the zip codes as character
 
-red_cross <- read_rds("data/Redcross.rds") %>% 
+red_cross <- read_rds("Redcross.rds") %>% 
   as_tibble() %>% 
   clean_names() %>% 
   mutate(zip = zip %>% as.character())
@@ -179,21 +190,22 @@ red_cross <- read_rds("data/Redcross.rds") %>%
 zip_raw_count <- red_cross %>% 
   mutate(year = year(date)) %>% 
   group_by(zip, year) %>% 
-  summarise(incident_count = n()) %>%
+  summarise(incident_count = n()) %>% #counts the number of incidents in each zip code in each year
   ungroup() %>% 
-  filter(year == 2018) %>% 
-  mutate(more_than_10 = case_when(incident_count <= 5 ~ "5",
-                                  incident_count <= 10 ~ "10",
-                                  TRUE ~ "alot"))
+  filter(year == 2018) %>% #we just will look at 2018
+  mutate(more_than_10 = case_when(incident_count <= 5 ~ "< 5",
+                                  incident_count <= 10 ~ "5-10",
+                                  TRUE ~ ">10")) #make discrete coloring scale
 
 
+# make the plot!
 il_map_df %>% 
   left_join(zip_raw_count, by = c("id" = "zip")) %>% 
   ggplot(aes(long, lat , group = group, fill = more_than_10)) + 
     geom_polygon() +
-    geom_path(color="black") +
+    geom_path(color = "black") +
     coord_quickmap() +
-    theme_map()
+    theme_map() +  ggtitle('Incidents Per Zip Code in 2018')
 
 
 ```
@@ -201,15 +213,26 @@ il_map_df %>%
 
 
 ## Timestamp Problems
-Some of the timestamp variables like Verified and  On_Scene have errors from encoding incorrectly upon data entry. They have timestamps that start in the year 1900 or have the time Red Cross learns about the incident happening after the Red Cross arrived on the scene of the incident or left the incident. This is leading to negative time for the Red Cross getting to the incident or negative time when the Red Cross is at the incident. Here is some code that changes those timestamp variables to be missing (NA) if they are before the dataset time period or lead to negative times to get to the scene or time at the incident. 
-```{r timestamp, warning=FALSE, message=FALSE}
-# packages for mutate and using dates
-library(dplyr) 
-library(lubridate)
+
+Some of the timestamp variables like `Verified` and  `On_Scene` have errors from encoding incorrectly upon data entry.
+
+The two main errors were: 
+
+  * timestamps that start in the year 1900 (not in 2014-2018 )
+  * "arrival of Red Cross" timestamps LATER than "dispatched (left to go to incident)" (not logical)
+
+The below code changes these errornous timestamps to `NA`.
+
+```{r timestamp, warning=FALSE, message=FALSE, eval=F}
+require(dplyr)
+require(lubridate)
+
 # creates a new variable for the time it takes for the Red Cross to be on the scene in minutes
-red_cross$time_to_inc<-difftime(red_cross$On_scene,red_cross$Verified, units = "min")
+red_cross$time_to_inc <- difftime(red_cross$On_scene,red_cross$Verified, units = "min")
+
 # creates a new variable for the time the Red Cross is at the incident in minutes
-red_cross$time_of_inc<-difftime(red_cross$Departed, red_cross$On_scene, units = "min")
+red_cross$time_of_inc <- difftime(red_cross$Departed, red_cross$On_scene, units = "min")
+
 # creates a new data frame from the red cross that makes all the timestamp variable be after 2014 and on
 # as well as make sure that the time to and time of variable is not negative
 red_cross_time <-red_cross %>%
@@ -220,8 +243,10 @@ red_cross_time <-red_cross %>%
          Departed = ifelse(Departed > ymd("2013-12-31"), Departed, as.POSIXct(NA)),
          time_to_inc =ifelse(time_to_inc >-1,time_to_inc, as.POSIXct(NA)),
          time_of_inc = ifelse(time_of_inc >-1, time_of_inc, as.POSIXct(NA)))
+
 # look at the median time the Red Cross takes to get to the scene
 median(red_cross_time$time_to_inc, na.rm = T)
+
 # look at the median time the Red Cross spends at an incient
 median(red_cross_time$time_of_inc, na.rm = T)
 

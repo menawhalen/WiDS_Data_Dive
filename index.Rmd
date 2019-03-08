@@ -35,13 +35,13 @@ ggplot(test, aes(month, n)) + geom_line() + xlab("") + ylab("Monthly Incidents")
 
 **NOTE**: This is not a question that we or the Red Cross definitively know the answer to. Feel free to be as creative as time allows!
 
-Current Red Cross hypotheses include: weather, more stable economic trends, successful implementation of preparedness initiatives (including the Red Cross’s Home Fire Campaign), a reduction in fire-related crimes, or better cooking habits. We do not provide datasets on these. **You can also identify other data sources!**
+Current Red Cross hypotheses include: weather, more stable economic trends, successful implementation of preparedness initiatives (including the Red Cross’s Home Fire Campaign), a reduction in fire-related crimes, or better cooking habits. Jim McGowan, our collaborater, provided a [helpful link](https://public.3.basecamp.com/p/S7RSg97Evv5wZwWpBmb12xqm) on some of these hypotheses. We do not provide datasets on these. **You can also identify other data sources!**
 
 We will give you a zip file to [download](#download) that has: 
  
 * Red Cross incident data (The is described more [below](#the-data)).
 * Shapefile for zip codes in Illinois (**NOTE**: you need ALL of the file types, not just the *.shp!)
-* Data by zip code from 2006-2010 ACS that includes Mean Income, Median Income, and Population for each zip code
+* Data by zip code from 2006-2010 American Community Survey (ACS) that includes Mean Income, Median Income, and Population for each zip code
 
 Below you'll also find:
 
@@ -54,7 +54,7 @@ Below you'll also find:
 
 Your team will need to create 2-3 slides (keep it simple) with your best visualization and text takeaways and/or further inquiries. 
 
-Please email your 2 slides with the email subject: "DATA DIVE", and a list of team members names to <als1@u.northwestern.edu> by 6:45 pm. 
+Please email your 2 slides with the email subject: "DATA DIVE", and a list of team members' names to <als1@u.northwestern.edu> by 6:45 pm. 
 
 A winning team will be announced shortly before 9 pm. Winner gets...bragging rights and eternal WiDS-dom and fame. 
 
@@ -168,6 +168,8 @@ Our incident data has as a zip code variable. The below example code joins Red C
 
 The below code also creates a data frame (`zip_income_pop_dat`) from the ACS Community Survey (ACS) 2010 Data for income (mean, median) and population  per zip. It should be ready for you to join + map away! 
 
+There were a small percentage of incidents in Indiana and Wisconsin, but choose to focus on Illinois for mapping purposes. 
+
 ```{r spatialdata, message=FALSE, warning=FALSE}
 # Illinois Zip Code Map ----------------------------------------------------
 
@@ -247,7 +249,7 @@ Some of the time stamp variables such as `verified` and  `on_scene` have errors 
 The two main errors were: 
 
   * time stamps that start in the year 1900 (not in 2014-2018 )
-  * `on_scene` (Red Cross arrives at the incident) time stamps LATER than `dispatched` (Red Cross hears about incident and sends volunteers). This doesn't make any sense.
+  * `on_scene` (Red Cross arrives at the incident) time stamps LATER than `dispatched` (Red Cross learns about incident and dispatches volunteers). This doesn't make any sense.
 
 The below code changes these erroneous time stamps to `NA`.
 

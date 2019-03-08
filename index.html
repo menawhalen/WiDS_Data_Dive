@@ -377,6 +377,7 @@ keep_zip_codes &lt;- read_rds(&quot;Redcross.rds&quot;) %&gt;%
 
 # Forming Chicago Zip Map Tibble ------------------------------------------
 
+#Make sure all spatial data files from the zipfile are downloaded into your working directory! 
 il_map_dat &lt;- readOGR(dsn=&quot;tl_2010_17_zcta510.shp&quot;) #read in IL zip codes shapefile </code></pre>
 <pre><code>## OGR data source with driver: ESRI Shapefile 
 ## Source: &quot;tl_2010_17_zcta510.shp&quot;, layer: &quot;tl_2010_17_zcta510&quot;

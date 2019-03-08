@@ -197,6 +197,7 @@ keep_zip_codes <- read_rds("Redcross.rds") %>%
 
 # Forming Chicago Zip Map Tibble ------------------------------------------
 
+#Make sure all spatial data files from the zipfile are downloaded into your working directory! 
 il_map_dat <- readOGR(dsn="tl_2010_17_zcta510.shp") #read in IL zip codes shapefile 
 il_map_dat@data$id <- rownames(il_map_dat@data)
 il_points <- fortify(il_map_dat, region = "ZCTA5CE10") %>% #fortify helps us turn the map into data points in a data frame 

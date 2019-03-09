@@ -287,3 +287,6 @@ median(red_cross_time$time_of_inc, na.rm = T)
 #Acknowledgments
 
 We'd like to thank Jim McGowan of the Chicago/Northern Illinois Red Cross for their partnership, and Kisa Kowal, Arend Kuyper, Karen Smilowitz, and Reut Nocham for their technical/logistical support. 
+
+# Post WiDS Survey
+Here is a [survey](https://weinberg.co1.qualtrics.com/jfe/form/SV_eajGrNBOovGB9RP) to give us some feedback on how to improve WiDS in the future. Thank you for your participation this year.

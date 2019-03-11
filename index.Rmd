@@ -283,10 +283,38 @@ median(red_cross_time$time_of_inc, na.rm = T)
 
 ```
 
+# Post WiDS Survey
+
+Here is a [survey](https://weinberg.co1.qualtrics.com/jfe/form/SV_eajGrNBOovGB9RP) to give us some feedback on how to improve WiDS in the future. Thank you for your participation this year.
+
+
+# Results from Data Dive
+
+From Toni Stapleton looking at the drop in no response needed incidents over time.
+![The “No response needed” type incident contributed to the majority of the drop in total incidents from 2017 to 2018](ts1.png)
+
+![Overall trent in incidents follows trend of no response needed](ts2.png)
+
+From the WiDS Team: Emily Hittner, Aleksandra Sasha Shirman, Blake Shirman, Katherine Simeon, Oscar Zarate.
+First looking at incident type to find that most incidents are nonrespose and fire.
+![Incident Type](os1.png)
+
+Then looking at just fires per day.
+![Fires Daily](os2.png)
+
+Looking at a fourier transform for the dominant signal
+![Fourier Tansform of Fires 1](os3.png)
+![Fourier Tansform of Fires 2](os4.png)
+
+
+They then looked at county level normalized fire frequency (per 10k people as a rough estimate of county size).
+![Normalized County Level Fires](os5.png)
+
+From WiDS Team: Frank Fineis, Martha Eichlersmith, and Noelle Samia. Running a generalized linear mixed model, they could not detect meaningful difference between pre and post 01/01/2018.
+![Generalized Linear Mixed Model](cook_co_preds.png)
+
 
 #Acknowledgments
 
 We'd like to thank Jim McGowan of the Chicago/Northern Illinois Red Cross for their partnership, and Kisa Kowal, Arend Kuyper, Karen Smilowitz, and Reut Nocham for their technical/logistical support. 
 
-# Post WiDS Survey
-Here is a [survey](https://weinberg.co1.qualtrics.com/jfe/form/SV_eajGrNBOovGB9RP) to give us some feedback on how to improve WiDS in the future. Thank you for your participation this year.

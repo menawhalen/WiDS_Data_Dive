@@ -303,6 +303,7 @@ Then looking at just fires per day.
 ![Fires Daily](os2.png)
 
 Looking at a fourier transform for the dominant signal
+
 ![Fourier Tansform of Fires 1](os3.png)
 ![Fourier Tansform of Fires 2](os4.png)
 

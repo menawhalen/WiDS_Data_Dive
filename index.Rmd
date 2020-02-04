@@ -101,7 +101,7 @@ The code book will list each variable name with a description followed by the va
   * **on_scene** - The time and date the volunteer response team arrives at an incident scene (*Timestamp dd/mm/yyyy 00:00:00 AM*)
   * **departed** - The time and date the volunteer response team departs the incident scene (*Timestamp dd/mm/yyyy 00:00:00 AM*)
 
-## <a href="WiDS2019.zip" download>Download</a>
+
 
 
 # General Workflow Suggestions
@@ -119,7 +119,7 @@ The code book will list each variable name with a description followed by the va
 ## Basic Cleaning
 Below is some R code for downloading already cleaned data. It has all dates and time stamps coded to be the correct type, also changed `incident_num` to an integer without a dash.
 
-```{r download, warning=FALSE, message=FALSE}
+```{r download, warning=FALSE, message=FALSE, echo=FALSE}
 require(readr)
 require(naniar) #for all you R nerds, here is the a new package that is great for handling missingness
 
@@ -135,7 +135,7 @@ missingness_info<-red_cross %>% miss_var_summary() #displays number and percent 
 
 Below is the code to create the cleaned rds file.
 
-```{r howtoclean, warning=FALSE, message=FALSE, eval=FALSE}
+```{r howtoclean, warning=FALSE, message=FALSE, eval=FALSE, echo=FALSE}
 # Libraries for reading URL and csv and cleaning 
 require(RCurl) 
 require(dplyr)
@@ -186,9 +186,7 @@ require(lubridate)
 require(janitor)
 require(hms)
 
-download.file("https://raw.githubusercontent.com/menawhalen/WiDS_Data_Dive/master/Redcross.rds", 
-              "Redcross.rds",
-              method="curl")
+
 keep_zip_codes <- read_rds("Redcross.rds") %>% 
   as_tibble() %>% 
   clean_names() %>%  #makes names lowercase column names
